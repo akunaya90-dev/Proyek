@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Scan Harga - Alfa Frozen Jaya</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+body{font-family:Arial;background:#f4f6f8;text-align:center;padding:20px}
+.box{background:#fff;padding:20px;border-radius:10px;max-width:400px;margin:auto}
+h2{color:#0a3d62}
+.price{font-size:20px;margin:10px 0}
+button{background:#25D366;color:#fff;border:none;padding:12px 20px;border-radius:8px;font-size:16px}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2>Alfa Frozen Jaya</h2>
+<div id="reader"></div>
+<div id="result"></div>
+</div>
+
+<script>
+const dataProduk = {
+  "8999991234567": {nama:"Nugget Ayam 500gr", retail:28000, agen:26000},
+  "8999999876543": {nama:"Sosis Premium", retail:32000, agen:30000}
+};
+
+function rupiah(angka){
+  return "Rp " + angka.toLocaleString("id-ID");
+}
+
+new Html5Qrcode("reader").start(
+{ facingMode: "environment" },
+{ fps: 10, qrbox: 250 },
+code => {
+  const p = dataProduk[code];
+  if(p){
+    document.getElementById("result").innerHTML = `
+      <h3>${p.nama}</h3>
+      <div class="price">Retail: <b>${rupiah(p.retail)}</b></div>
+      <div class="price">Agen: <b>${rupiah(p.agen)}</b></div>
+      <a href="https://wa.me/6285656520341?text=Halo%20Alfa%20Frozen%20Jaya%0ASaya%20mau%20order%20${encodeURIComponent(p.nama)}"
+      target="_blank">
+      <button>ORDER VIA WHATSAPP</button></a>
+    `;
+  } else {
+    document.getElementById("result").innerHTML = "❌ Produk tidak terdaftar";
+  }
+}
+);
+</script>
+
+</body>
+</html>
